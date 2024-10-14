@@ -1,6 +1,9 @@
 export NGC_API_KEY=<YOUR API KEY FROM build.nvidia.com, it should look like nvapi-.... > 
-export LOCAL_NIM_CACHE=/raid/cmunley/.cache/nim
+
+# update cache if you'd like
+export LOCAL_NIM_CACHE=~/.cache/nim
 mkdir -p "$LOCAL_NIM_CACHE"
+
 docker run --rm \
     --gpus '"device=0,1"' \
     --shm-size=16GB \
