@@ -29,8 +29,3 @@ if prompt:
             message_placeholder.markdown(full_response + "▌")
 
         message_placeholder.markdown(full_response)
-
-    # Optionally, store the message in session state
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
