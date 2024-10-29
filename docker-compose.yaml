@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  mistral:
+    image: nvcr.io/nim/nv-mistralai/mistral-nemo-12b-instruct:latest
+    container_name: mistral-nemo
+    environment:
+      - NGC_API_KEY=${NGC_API_KEY}
+      - NIM_MODEL_PROFILE=tensorrt_llm-a100-fp16-tp2-latency
+    volumes:
+      - /raid/cmunley/.cache:/opt/nim/.cache
+    ports:
+      - "8080:8000"
+    # network_mode: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["0,1"]
+              capabilities: [gpu]
+    shm_size: 16GB
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: streamlit-frontend
+    volumes:
+      - ./:/app
+    command: streamlit run main.py --server.port 8047
+    network_mode: host
+    depends_on:
+      - mistral
